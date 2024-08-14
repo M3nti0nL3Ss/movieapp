@@ -3,6 +3,7 @@ from core.models import Actor, Movie, Review
 from faker import Faker
 import random
 
+
 class Command(BaseCommand):
     help = 'Inserts dummy data into the database if not already present'
 
@@ -11,12 +12,14 @@ class Command(BaseCommand):
 
         # Check if data already exists
         if Actor.objects.exists() and Movie.objects.exists():
-            self.stdout.write(self.style.SUCCESS('Dummy data already present. Skipping insertion.'))
+            MESSAGE = 'Dummy data already present. Skipping insertion.'
+            self.stdout.write(
+                self.style.SUCCESS(MESSAGE))
             return
 
         # Create 10 actors
         actors = []
-        for _ in range(10): 
+        for _ in range(10):
             actor = Actor.objects.create(
                 first_name=fake.first_name(),
                 last_name=fake.last_name()
@@ -24,14 +27,14 @@ class Command(BaseCommand):
             actors.append(actor)
 
         # Create 20 movies
-        for _ in range(20): 
+        for _ in range(20):
             movie = Movie.objects.create(
                 title=fake.sentence(nb_words=3),
                 description=fake.text(max_nb_chars=200)
             )
-            
             # Assign random actors to the movie
-            movie_actors = random.sample(actors, k=random.randint(1, len(actors)))
+            randint = random.randint(1, len(actors))
+            movie_actors = random.sample(actors, k=randint)
             movie.actors.set(movie_actors)
             movie.save()
 
@@ -40,5 +43,5 @@ class Command(BaseCommand):
                 movie=movie,
                 grade=random.randint(1, 5)  # Random grade between 1 and 5
             )
-
-        self.stdout.write(self.style.SUCCESS('Dummy data inserted successfully.'))
+        MESSAGE = 'Dummy data inserted successfully.'
+        self.stdout.write(self.style.SUCCESS(MESSAGE))
