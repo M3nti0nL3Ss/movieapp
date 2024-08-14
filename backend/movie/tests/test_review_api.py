@@ -6,13 +6,17 @@ from rest_framework.test import APIClient
 from core.models import Review, Movie
 from movie.serializers import ReviewSerializer
 
+
 def get_review_list_url(movie_id):
     """Create and return a reviews list URL for a given movie."""
     return reverse('movie:movie-reviews-list', kwargs={'movie_pk': movie_id})
 
+
 def detail_url(movie_id, review_id):
     """Create and return a review detail URL."""
-    return reverse('movie:movie-reviews-detail', kwargs={'movie_pk': movie_id, 'pk': review_id})
+    return reverse('movie:movie-reviews-detail',
+                   kwargs={'movie_pk': movie_id, 'pk': review_id})
+
 
 def create_movie(**params):
     """Create and return a sample movie."""
@@ -23,6 +27,7 @@ def create_movie(**params):
     defaults.update(params)
     movie = Movie.objects.create(**defaults)
     return movie
+
 
 class PublicReviewsApiTests(TestCase):
     """Test unauthenticated API requests."""
