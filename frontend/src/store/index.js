@@ -48,20 +48,20 @@ export default createStore({
         },
         async addReview(_, { movieId, grade }) {
           try {
-            await axios.post(`/api/movies/${movieId}/reviews/`, {movie:movieId, grade: grade});
+            await axios.post(`/api/movies/${movieId}/reviews/`, { movie: movieId, grade: grade });
           } catch (error) {
             console.error('Error adding review:', error);
           }
         },
-        async updateMovie(_, {  movieId,editedMovie }) {
+        async updateMovie(_, { movieId, editedMovie }) {
           try {
-            await axios.post(`/api/movies/${movieId}`, editedMovie);
+            await axios.put(`/api/movies/${movieId}/`, editedMovie);
           } catch (error) {
             console.error('Error editing movie:', error);
           }
-        },
+        }
       },
-      
+
     }
   }
 })

@@ -9,6 +9,7 @@
             label="Grade"
             type="number"
             min="0"
+            max="5"
             step="1"
           ></v-text-field>
           <v-btn type="submit" color="primary">Submit</v-btn>
