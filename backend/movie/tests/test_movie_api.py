@@ -11,6 +11,7 @@ from core.models import Movie
 
 from movie.serializers import (
     MovieSerializer,
+    MovieDetailSerializer
 )
 
 MOVIES_URL = reverse('movie:movie-list')
@@ -61,7 +62,7 @@ class PublicMovieAPITests(TestCase):
 
         url = detail_url(movie.id)
         res = self.client.get(url)
-        serializer = MovieSerializer(movie)
+        serializer = MovieDetailSerializer(movie)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
