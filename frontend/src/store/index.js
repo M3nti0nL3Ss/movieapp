@@ -20,7 +20,8 @@ export default createStore({
         },
       },
       actions: {
-        async fetchMovies({ commit }, page) {
+        async fetchMovies({ commit }, page = 1) {
+          console.log(page);
           try {
             const response = await axios.get(`/api/movies/?page=${page}`);
             commit('SET_MOVIES', response.data.results);
