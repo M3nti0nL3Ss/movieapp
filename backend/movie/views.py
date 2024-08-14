@@ -4,7 +4,7 @@ Views for movies
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 from movie import serializers
-from core.models import Movie
+from core.models import Movie, Actor, Review
 
 
 class MovieViewSet(viewsets.ModelViewSet):
@@ -23,6 +23,27 @@ class MovieViewSet(viewsets.ModelViewSet):
             return serializers.MovieSerializer
 
         return self.serializer_class
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+
+class ActorViewSet(viewsets.ModelViewSet):
+    """Manage actors in the database."""
+    serializer_class = serializers.ActorSerializer
+    queryset = Actor.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.ReviewSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        movie_id = self.kwargs['movie_pk']
+        return Review.objects.filter(movie_id=movie_id)
 
     def perform_create(self, serializer):
         serializer.save()
