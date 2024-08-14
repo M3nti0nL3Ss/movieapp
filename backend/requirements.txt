@@ -4,3 +4,4 @@ psycopg2>=2.9.9,<2.10
 drf-spectacular>=0.27.2,<0.28
 Pillow>=10.4.0,<10.5
 django-cors-headers>=4.4.0,<4.5
+faker>=27.0.0,<27.1 # Only in DEV
