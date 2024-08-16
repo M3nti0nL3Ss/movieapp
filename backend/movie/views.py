@@ -8,10 +8,10 @@ from rest_framework import status
 from movie import serializers
 from core.models import Movie, Actor, Review
 
-from django.db import transaction
 from asgiref.sync import sync_to_async
 
 from adrf.viewsets import ModelViewSet as AsyncModelViewSet
+
 
 class MovieViewSet(viewsets.ModelViewSet):
     """View for managing movie APIs."""
@@ -32,6 +32,7 @@ class MovieViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save()
 
+
 class ActorViewSet(viewsets.ModelViewSet):
     """Manage actors in the database."""
     serializer_class = serializers.ActorSerializer
@@ -48,12 +49,13 @@ class ReviewViewSet(AsyncModelViewSet):
     def get_queryset(self):
         movie_id = self.kwargs['movie_pk']
         return Review.objects.filter(movie_id=movie_id).order_by("-id")
-    
+
     async def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         await sync_to_async(serializer.is_valid)()
-        # Using sync_to_async for save operation, including a sync function wrapper
+        # Using sync_to_async for save operation
+        # including a sync function wrapper
         await serializer.asave()
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
+        return Response(serializer.data,
+                        status=status.HTTP_201_CREATED, headers=headers)

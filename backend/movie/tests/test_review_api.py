@@ -73,4 +73,3 @@ class PublicReviewsApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         reviews = Review.objects.filter(id=review.id)
         self.assertFalse(reviews.exists())
-

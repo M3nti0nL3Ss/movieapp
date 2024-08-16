@@ -35,7 +35,6 @@ def create_movie(**params):
     return movie
 
 
-
 class PublicMovieAPITests(TestCase):
     """Test unauthenticated API requests."""
     def setUp(self):

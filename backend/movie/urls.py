@@ -3,8 +3,6 @@ from django.urls import (
     include,
 )
 
-from rest_framework.routers import DefaultRouter
-
 from movie import views
 
 from rest_framework_nested import routers
@@ -15,7 +13,8 @@ router.register(r'actors', views.ActorViewSet)
 
 # Création d'un router imbriqué pour les reviews
 movies_router = routers.NestedDefaultRouter(router, r'movies', lookup='movie')
-movies_router.register(r'reviews', views.ReviewViewSet, basename='movie-reviews')
+BN = 'movie-reviews'  # For linting
+movies_router.register(r'reviews', views.ReviewViewSet, basename=BN)
 
 app_name = 'movie'
 
