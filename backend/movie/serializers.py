@@ -3,11 +3,12 @@ Serializers for movies
 """
 
 from rest_framework import serializers
+from adrf.serializers import ModelSerializer as AsyncModelSerializer
 
 from core.models import Movie, Actor, Review
 
 
-class ReviewSerializer(serializers.ModelSerializer):
+class ReviewSerializer(AsyncModelSerializer):
     class Meta:
         model = Review
         fields = '__all__'
