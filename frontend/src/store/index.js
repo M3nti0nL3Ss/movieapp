@@ -8,20 +8,36 @@ export default createStore({
     movies: {
       namespaced: true,
       state: {
-        movies: [],
+        byId: {}, // gives { id: movie }
+        allIds: [], // gives [id1, id2, ...]
         totalPages: 0,
       },
       mutations: {
         SET_MOVIES(state, movies) {
-          state.movies = movies;
+          // Normalize movies array into byId object
+          state.byId = movies.reduce((acc, movie) => {
+            acc[movie.id] = movie;
+            return acc;
+          }, {});
+
+          // Store all IDs for pagination
+          state.allIds = movies.map(movie => movie.id);
         },
         SET_TOTAL_PAGES(state, totalPages) {
           state.totalPages = totalPages;
         },
+        ADD_MOVIE(state, movie) {
+          state.byId[movie.id] = movie;
+          if (!state.allIds.includes(movie.id)) {
+            state.allIds.push(movie.id);
+          }
+        },
+        UPDATE_MOVIE(state, updatedMovie) {
+          state.byId[updatedMovie.id] = updatedMovie;
+        },
       },
       actions: {
         async fetchMovies({ commit }, page = 1) {
-          console.log(page);
           try {
             const response = await axios.get(`/api/movies/?page=${page}`);
             commit('SET_MOVIES', response.data.results);
@@ -53,15 +69,15 @@ export default createStore({
             console.error('Error adding review:', error);
           }
         },
-        async updateMovie(_, { movieId, editedMovie }) {
+        async updateMovie({ commit }, { movieId, editedMovie }) {
           try {
-            await axios.put(`/api/movies/${movieId}/`, editedMovie);
+            const response = await axios.put(`/api/movies/${movieId}/`, editedMovie);
+            commit('UPDATE_MOVIE', response.data);
           } catch (error) {
             console.error('Error editing movie:', error);
           }
         }
       },
-
     }
   }
 })
