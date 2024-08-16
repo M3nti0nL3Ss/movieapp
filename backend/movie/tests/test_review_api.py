@@ -54,7 +54,7 @@ class PublicReviewsApiTests(TestCase):
         movie = create_movie()
         review = Review.objects.create(grade=5, movie=movie)
 
-        payload = {'grade': 5}
+        payload = {'grade': 6}
         url = detail_url(movie.id, review.id)
         res = self.client.patch(url, payload)
 
@@ -71,5 +71,6 @@ class PublicReviewsApiTests(TestCase):
         res = self.client.delete(url)
 
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
-        reviews = Review.objects.all()
+        reviews = Review.objects.filter(id=review.id)
         self.assertFalse(reviews.exists())
+
