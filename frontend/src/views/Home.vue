@@ -11,7 +11,7 @@
     <v-pagination
       v-model="currentPage"
       :length="totalPages"
-      @input="handlePageChange"
+      @click="handlePageChange(currentPage)"
     ></v-pagination>
   </div>
 </template>
@@ -41,10 +41,9 @@ export default {
       this.$router.push({ name: 'MovieDetails', params: { id } });
     },
     handlePageChange(page) {
-      if (this.currentPage !== page) {
+      console.log(page);
         this.currentPage = page;
         this.fetchMovies(page);
-      }
     },
   },
   created() {
