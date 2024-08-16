@@ -44,7 +44,7 @@ class PublicReviewsApiTests(TestCase):
         url = get_review_list_url(movie.id)
         res = self.client.get(url)
 
-        reviews = Review.objects.all().order_by('id')
+        reviews = Review.objects.all().order_by('-id')
         serializer = ReviewSerializer(reviews, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['results'], serializer.data)

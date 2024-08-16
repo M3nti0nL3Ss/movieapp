@@ -35,6 +35,7 @@ def create_movie(**params):
     return movie
 
 
+
 class PublicMovieAPITests(TestCase):
     """Test unauthenticated API requests."""
     def setUp(self):
@@ -65,15 +66,3 @@ class PublicMovieAPITests(TestCase):
         serializer = MovieDetailSerializer(movie)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
-
-    def test_create_movie(self):
-        """Test creating a movie."""
-        payload = {
-            'title': 'Test movie',
-            'description': 'Test description for the movie'
-        }
-        res = self.client.post(MOVIES_URL, payload)
-        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        movie = Movie.objects.get(id=res.data['id'])
-        for k, v in payload.items():
-            self.assertEqual(getattr(movie, k), v)

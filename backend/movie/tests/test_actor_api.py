@@ -41,7 +41,7 @@ class PublicActorsApiTests(TestCase):
 
         res = self.client.get(ACTORS_URL)
 
-        actors = Actor.objects.all().order_by('-last_name')
+        actors = Actor.objects.all().order_by('-id')
         serializr = ActorSerializer(actors, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['results'], serializr.data)

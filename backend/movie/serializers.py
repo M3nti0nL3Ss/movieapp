@@ -40,6 +40,26 @@ class MovieDetailSerializer(MovieSerializer):
         fields = MovieSerializer.Meta.fields + ['reviews', 'actors']
         # depth = 1
 
+    def create(self, validated_data):
+        actors_data = validated_data.pop('actors', [])
+        movie = Movie.objects.create(**validated_data)
+
+        for actor_data in actors_data:
+            actor_id = actor_data.get('id', None)
+            if actor_id:
+                # Update existing actor
+                actor = Actor.objects.get(id=actor_id)
+                for attr, value in actor_data.items():
+                    setattr(actor, attr, value)
+                actor.save()
+                movie.actors.add(actor)
+            else:
+                # Create a new actor and associate with the movie
+                actor = Actor.objects.create(**actor_data)
+                movie.actors.add(actor)
+
+        return movie
+
     def update(self, instance, validated_data):
         actors_data = validated_data.pop('actors', [])
         instance = super().update(instance, validated_data)
