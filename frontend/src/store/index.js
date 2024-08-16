@@ -1,7 +1,6 @@
-import { createStore } from 'vuex'
-import axios from 'axios'
-
-axios.defaults.baseURL = process.env.VUE_APP_API_URL
+// src/store/index.js
+import { createStore } from 'vuex';
+import ClientAPI from '@/api/ClientAPI';
 
 export default createStore({
   modules: {
@@ -39,40 +38,38 @@ export default createStore({
       actions: {
         async fetchMovies({ commit }, page = 1) {
           try {
-            const response = await axios.get(`/api/movies/?page=${page}`);
-            commit('SET_MOVIES', response.data.results);
-            commit('SET_TOTAL_PAGES', Math.ceil(response.data.count / response.data.results.length));
+            const data = await ClientAPI.fetchMovies(page);
+            commit('SET_MOVIES', data.results);
+            commit('SET_TOTAL_PAGES', Math.ceil(data.count / data.results.length));
           } catch (error) {
             console.error('Error fetching movies:', error);
           }
         },
         async fetchMovie(_, id) {
           try {
-            const response = await axios.get(`/api/movies/${id}/`);
-            return response.data;
+            return await ClientAPI.fetchMovie(id);
           } catch (error) {
             console.error('Error fetching movie details:', error);
           }
         },
         async fetchReviews(_, id) {
           try {
-            const response = await axios.get(`/api/movies/${id}/reviews/`);
-            return response.data.results;
+            return await ClientAPI.fetchReviews(id);
           } catch (error) {
             console.error('Error fetching reviews:', error);
           }
         },
         async addReview(_, { movieId, grade }) {
           try {
-            await axios.post(`/api/movies/${movieId}/reviews/`, { movie: movieId, grade: grade });
+            await ClientAPI.addReview(movieId, grade);
           } catch (error) {
             console.error('Error adding review:', error);
           }
         },
         async updateMovie({ commit }, { movieId, editedMovie }) {
           try {
-            const response = await axios.put(`/api/movies/${movieId}/`, editedMovie);
-            commit('UPDATE_MOVIE', response.data);
+            const updatedMovie = await ClientAPI.updateMovie(movieId, editedMovie);
+            commit('UPDATE_MOVIE', updatedMovie);
           } catch (error) {
             console.error('Error editing movie:', error);
           }
@@ -80,4 +77,4 @@ export default createStore({
       },
     }
   }
-})
+});
