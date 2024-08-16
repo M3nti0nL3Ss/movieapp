@@ -36,11 +36,18 @@ export default createStore({
         },
       },
       actions: {
-        async fetchMovies({ commit }, page = 1) {
+        async fetchMovies({ commit, state }, page = 1) {
           try {
             const data = await ClientAPI.fetchMovies(page);
-            commit('SET_MOVIES', data.results);
-            commit('SET_TOTAL_PAGES', Math.ceil(data.count / data.results.length));
+            const results = data.results || [];
+            commit('SET_MOVIES', results);
+            if (state.totalPages == 0) { // update totalPages once
+              const count = data.count || 0;
+              const resultsPerPage = results.length;
+
+              const totalPages = resultsPerPage > 1 ? Math.ceil(count / resultsPerPage) : 1;
+              commit('SET_TOTAL_PAGES', totalPages);
+            }
           } catch (error) {
             console.error('Error fetching movies:', error);
           }
