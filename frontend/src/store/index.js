@@ -25,7 +25,7 @@ export default createStore({
           try {
             const response = await axios.get(`/api/movies/?page=${page}`);
             commit('SET_MOVIES', response.data.results);
-            commit('SET_TOTAL_PAGES', Math.ceil(response.data.count / 5));
+            commit('SET_TOTAL_PAGES', Math.ceil(response.data.count / response.data.results.length));
           } catch (error) {
             console.error('Error fetching movies:', error);
           }

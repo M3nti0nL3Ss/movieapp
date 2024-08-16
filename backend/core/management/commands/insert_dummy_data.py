@@ -27,7 +27,7 @@ class Command(BaseCommand):
             actors.append(actor)
 
         # Create 20 movies
-        for _ in range(20):
+        for _ in range(21):
             movie = Movie.objects.create(
                 title=fake.sentence(nb_words=3),
                 description=fake.text(max_nb_chars=200)
