@@ -16,7 +16,7 @@ from adrf.viewsets import ModelViewSet as AsyncModelViewSet
 class MovieViewSet(viewsets.ModelViewSet):
     """View for managing movie APIs."""
     serializer_class = serializers.MovieDetailSerializer
-    queryset = Movie.objects.all()
+    queryset = Movie.objects.all().order_by('-id')
     permission_classes = [AllowAny]
 
     def get_queryset(self):
@@ -35,7 +35,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 class ActorViewSet(viewsets.ModelViewSet):
     """Manage actors in the database."""
     serializer_class = serializers.ActorSerializer
-    queryset = Actor.objects.all()
+    queryset = Actor.objects.all().order_by("-id")
 
     def perform_create(self, serializer):
         serializer.save()
@@ -47,7 +47,7 @@ class ReviewViewSet(AsyncModelViewSet):
 
     def get_queryset(self):
         movie_id = self.kwargs['movie_pk']
-        return Review.objects.filter(movie_id=movie_id)
+        return Review.objects.filter(movie_id=movie_id).order_by("-id")
     
     async def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
