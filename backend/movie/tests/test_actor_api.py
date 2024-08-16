@@ -67,5 +67,5 @@ class PublicActorsApiTests(TestCase):
         res = self.client.delete(url)
 
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
-        actors = Actor.objects.all()
+        actors = Actor.objects.filter(id=actor.id)
         self.assertFalse(actors.exists())
