@@ -12,7 +12,6 @@
       v-if="!isEditing" 
     />
     
-    
     <p>
       <v-textarea 
         v-if="isEditing" 
@@ -58,6 +57,10 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
+
+    <p>
+      <strong>Average Grade:</strong> {{ averageRating }}
+    </p>
     
     <v-btn @click="toggleEdit">
       {{ isEditing ? 'Save' : 'Edit' }}
@@ -71,6 +74,7 @@
   </div>
 </template>
 
+
 <script>
 import { mapActions } from 'vuex';
 import AddReview from './AddReview.vue';
@@ -81,18 +85,29 @@ export default {
     AddReview,
   },
   data: () => ({
-    movie: null,
+    movie: { reviews: [] },
     showAddReviewForm: false,
     isEditing: false,
     editedMovie: {},
   }),
+  computed: {
+    averageRating() {
+    if (this.movie && this.movie.reviews && this.movie.reviews.length > 0) {
+      const total = this.movie.reviews.reduce((sum, review) => sum + review.grade, 0);
+      return (total / this.movie.reviews.length).toFixed(1); 
+    }
+    return 'N/A';
+  },
+  },
   methods: {
     ...mapActions('movies', ['fetchMovie', 'fetchReviews', 'updateMovie']),
     async loadMovie() {
       const id = this.$route.params.id;
       this.movie = await this.fetchMovie(id);
-      this.movie.reviews = await this.fetchReviews(id);
-      this.editedMovie = JSON.parse(JSON.stringify(this.movie)); // Deep clone to avoid references
+      if (this.movie) {
+        this.movie.reviews = await this.fetchReviews(id) || []; 
+        this.editedMovie = JSON.parse(JSON.stringify(this.movie)); 
+      }
     },
     async saveChanges() {
       const id = this.$route.params.id;
