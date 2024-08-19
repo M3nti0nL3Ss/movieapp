@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Actor(models.Model):
@@ -20,7 +21,10 @@ class Movie(models.Model):
 
 class Review(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    grade = models.IntegerField()
+    grade = models.IntegerField(validators=[
+            MaxValueValidator(5),
+            MinValueValidator(0)
+        ])
 
     def __str__(self):
         return self.movie.title
