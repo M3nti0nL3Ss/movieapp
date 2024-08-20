@@ -4,7 +4,6 @@ Serializers for movies
 
 from django.db.models import Avg
 from rest_framework import serializers
-from rest_framework.mixins import ListModelMixin
 
 from adrf.serializers import ModelSerializer as AsyncModelSerializer
 
@@ -15,7 +14,6 @@ class ReviewSerializer(AsyncModelSerializer):
     class Meta:
         model = Review
         fields = '__all__'
-    
 
 
 class MovieSerializer(serializers.ModelSerializer):
@@ -26,11 +24,12 @@ class MovieSerializer(serializers.ModelSerializer):
         model = Movie
         fields = ['id', 'title', 'description', 'average_grade']
         read_only_fields = ['id']
-    
+
     def get_average_grade(self, obj):
         # Calculate the average grade for the movie
         movie_id = obj.id
-        avg_grade = Review.objects.filter(movie_id=movie_id).aggregate(Avg('grade'))['grade__avg']
+        avg_grade = Review.objects.filter(
+            movie_id=movie_id).aggregate(Avg('grade'))['grade__avg']
         return avg_grade
 
 
