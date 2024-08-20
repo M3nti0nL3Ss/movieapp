@@ -45,6 +45,7 @@ class ActorViewSet(viewsets.ModelViewSet):
 class ReviewViewSet(AsyncModelViewSet):
     serializer_class = serializers.ReviewSerializer
     permission_classes = [AllowAny]
+    pagination_class = None
 
     def get_queryset(self):
         movie_id = self.kwargs['movie_pk']

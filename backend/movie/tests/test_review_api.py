@@ -49,18 +49,18 @@ class PublicReviewsApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['results'], serializer.data)
 
-    # def test_update_review(self):
-    #     """Test updating a review."""
-    #     movie = create_movie()
-    #     review = Review.objects.create(grade=5, movie=movie)
+    def test_update_review(self):
+        """Test updating a review."""
+        movie = create_movie()
+        review = Review.objects.create(grade=5, movie=movie)
 
-    #     payload = {'grade': 6}
-    #     url = detail_url(movie.id, review.id)
-    #     res = self.client.patch(url, payload)
+        payload = {'grade': 6}
+        url = detail_url(movie.id, review.id)
+        res = self.client.patch(url, payload)
 
-    #     self.assertEqual(res.status_code, status.HTTP_200_OK)
-    #     review.refresh_from_db()
-    #     self.assertEqual(review.grade, payload['grade'])
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        review.refresh_from_db()
+        self.assertEqual(review.grade, payload['grade'])
 
     def test_delete_review(self):
         """Test deleting a review."""
