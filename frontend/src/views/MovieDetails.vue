@@ -59,7 +59,7 @@
     </v-list>
 
     <p>
-      <strong>Average Grade:</strong> {{ averageRating }}
+      <strong>Average Grade:</strong> {{ movie.average_grade }}
     </p>
     
     <v-btn @click="toggleEdit">
