@@ -39,7 +39,7 @@ class PublicReviewsApiTests(TestCase):
         """Test retrieving a list of reviews."""
         movie = create_movie()
         Review.objects.create(grade=5, movie=movie)
-        Review.objects.create(grade=5, movie=movie)
+        Review.objects.create(grade=4, movie=movie)
 
         url = get_review_list_url(movie.id)
         res = self.client.get(url)
@@ -47,14 +47,14 @@ class PublicReviewsApiTests(TestCase):
         reviews = Review.objects.all().order_by('-id')
         serializer = ReviewSerializer(reviews, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data['results'], serializer.data)
+        self.assertEqual(res.data, serializer.data)
 
     def test_update_review(self):
         """Test updating a review."""
         movie = create_movie()
         review = Review.objects.create(grade=5, movie=movie)
 
-        payload = {'grade': 6}
+        payload = {'grade': 4}
         url = detail_url(movie.id, review.id)
         res = self.client.patch(url, payload)
 
